@@ -173,8 +173,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 }
               }}
             >
-              <div className="w-8 h-8 flex items-center justify-center shrink-0">
-                <img src="/logotip.svg" alt="" className="w-8 h-8 object-contain" aria-hidden="true" />
+              <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shrink-0">
+                <img
+                  src="/logotip.svg"
+                  alt=""
+                  className="w-10 h-10 md:w-12 md:h-12 object-contain"
+                  aria-hidden="true"
+                />
               </div>
             </Link>
 
