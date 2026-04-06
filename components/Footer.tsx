@@ -15,8 +15,8 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-12 mb-12">
           <div className="col-span-1 md:col-span-1">
             <Link to={paths.home} className="flex items-center gap-2 mb-4 group" aria-label={t('header.home')}>
-              <div className="w-10 h-10 flex items-center justify-center">
-                <img src="/logotip.svg" alt="" className="w-10 h-10 object-contain" aria-hidden="true" />
+              <div className="h-12 md:h-14 flex items-center justify-center">
+                <img src="/logotip.svg" alt="" className="h-12 md:h-14 w-auto object-contain" aria-hidden="true" />
               </div>
             </Link>
             <p className="text-ink-muted text-sm leading-relaxed mb-6 max-w-xs">{t('footer.tagline')}</p>
