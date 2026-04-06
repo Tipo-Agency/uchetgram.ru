@@ -176,9 +176,6 @@ export const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
               <div className="w-8 h-8 flex items-center justify-center shrink-0">
                 <img src="/logotip.svg" alt="" className="w-8 h-8 object-contain" aria-hidden="true" />
               </div>
-              <span className="text-lg md:text-xl font-bold tracking-tight text-ink truncate">
-                uchetgram<span className="text-brand">.ru</span>
-              </span>
             </Link>
 
             <nav className="hidden lg:flex items-center gap-1 min-w-0 flex-1 justify-center" aria-label="Desktop navigation">

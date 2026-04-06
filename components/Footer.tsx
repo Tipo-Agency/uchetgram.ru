@@ -18,9 +18,6 @@ export const Footer: React.FC = () => {
               <div className="w-8 h-8 flex items-center justify-center">
                 <img src="/logotip.svg" alt="" className="w-8 h-8 object-contain" aria-hidden="true" />
               </div>
-              <span className="text-xl font-bold tracking-tight text-ink group-hover:text-brand transition-colors duration-200">
-                uchetgram<span className="text-brand">.ru</span>
-              </span>
             </Link>
             <p className="text-ink-muted text-sm leading-relaxed mb-6 max-w-xs">{t('footer.tagline')}</p>
             <div className="flex gap-4">
