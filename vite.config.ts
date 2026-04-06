@@ -48,9 +48,9 @@ export default defineConfig({
         minify: false,
       },
       manifest: {
-        name: 'uchetgram.ru',
-        short_name: 'uchetgram.ru',
-        description: 'CRM, ERP и автоматизация бизнеса. MAX и Telegram — в одном контуре',
+        name: 'Taska.uz',
+        short_name: 'Taska.uz',
+        description: 'CRM, ERP и автоматизация бизнеса в Узбекистане',
         theme_color: '#1356A3',
         background_color: '#f8fafc',
         display: 'standalone',

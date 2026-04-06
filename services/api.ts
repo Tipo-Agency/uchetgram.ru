@@ -16,7 +16,7 @@ const funnelIdFromEnv = () => import.meta.env.VITE_TIPA_FUNNEL_ID?.trim() || '';
 const sourceIdFromEnv = () => import.meta.env.VITE_TIPA_SOURCE_ID?.trim() || '';
 
 /**
- * Тело POST /api/deals (camelCase).
+ * Тело POST /api/deals (camelCase, как create_deal на tipa).
  * Телефон дублируем в `phone` / `contactPhone` — в интерфейсе CRM подставляются в поля контакта, не только в «Примечание».
  * @see README — раздел «Заявки»
  */
@@ -30,7 +30,7 @@ export interface TipaDealCreateBody {
   funnelId?: string;
   /** UUID справочника «Источник» в tipa (если задан VITE_TIPA_SOURCE_ID) */
   sourceId?: string;
-  /** Номер в компактном виде (+998…) для подстановки в карточку сделки */
+  /** Номер в компактном виде для подстановки в карточку сделки */
   phone?: string;
   /** Алиас для бэкендов, которые ожидают именно это имя поля */
   contactPhone?: string;
@@ -123,72 +123,23 @@ async function postDealToTipa(payload: TipaDealCreateBody): Promise<boolean> {
   }
 }
 
-async function notifyTelegram(leadData: Lead): Promise<boolean> {
-  const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-  const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
-  if (!botToken || !chatId) {
-    return false;
-  }
-
-  const name = (leadData.name || '').trim();
-  const { compact: fullPhone } = buildPhoneLines(leadData.contact || '');
-
-  const text = [
-    '<b>Новая заявка uchetgram.ru</b>',
-    '',
-    `<b>Имя:</b> ${name || '—'}`,
-    `<b>Телефон:</b> ${fullPhone || leadData.contact || '—'}`,
-    leadData.message ? `<b>Сообщение:</b> ${leadData.message}` : '',
-    `<b>Источник:</b> ${leadData.source === 'modal_form' ? 'модальное окно' : 'форма на странице'}`,
-  ]
-    .filter(Boolean)
-    .join('\n');
-
-  try {
-    const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text,
-        parse_mode: 'HTML',
-      }),
-    });
-    if (!res.ok && import.meta.env.DEV) {
-      const errText = await res.text().catch(() => '');
-      console.error('[submitLead] Telegram:', res.status, errText);
-    }
-    return res.ok;
-  } catch (error) {
-    if (import.meta.env.DEV) console.error('[submitLead] Telegram:', error);
-    return false;
-  }
-}
-
 export type SubmitLeadResult = {
-  /** Сделка создана в CRM (POST /api/deals → 2xx) */
-  crmOk: boolean;
-  /** Сообщение ушло в Telegram */
-  telegramOk: boolean;
-  /** Хотя бы один канал сработал — можно не ронять UX полностью */
   ok: boolean;
 };
 
 /**
- * POST `/api/deals` (тот же origin → tipa) + Telegram параллельно.
- * `crmOk` / `telegramOk` — для отладки; пользователю показываем один сценарий успеха при `ok`.
+ * POST `/api/deals` на том же origin (прокси → tipa). Успех только при ответе CRM 2xx.
  */
 export const submitLead = async (leadData: Lead): Promise<SubmitLeadResult> => {
   try {
     const payload = buildDealPayload(leadData);
-    const [crmOk, telegramOk] = await Promise.all([postDealToTipa(payload), notifyTelegram(leadData)]);
-    const ok = crmOk || telegramOk;
+    const ok = await postDealToTipa(payload);
     if (ok) {
       trackMetrikaGoal('lead_submit');
     }
-    return { crmOk, telegramOk, ok };
+    return { ok };
   } catch (error) {
     console.error('[submitLead]', error);
-    return { crmOk: false, telegramOk: false, ok: false };
+    return { ok: false };
   }
 };

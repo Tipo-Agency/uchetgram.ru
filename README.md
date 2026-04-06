@@ -1,12 +1,12 @@
-# uchetgram.ru
+# Taska.uz
 
-Маркетинговый сайт и лендинги модулей uchetgram (React, Vite, TypeScript).
+Маркетинговый сайт и лендинги модулей Taska (React, Vite, TypeScript).
 
 ## Локальный запуск
 
 - **Node.js** LTS
 - `npm install`
-- Скопируйте `.env.example` → `.env.local`. Лиды по умолчанию: **`POST /api/deals`** (тот же origin). Локально Vite проксирует на tipa; в проде нужен **nginx** (см. ниже). Опционально: **`VITE_LEAD_SUBMIT_URL`**, **`VITE_TIPA_FUNNEL_ID`**, **`VITE_TIPA_SOURCE_ID`** (UUID из tipa), Telegram.
+- Скопируйте `.env.example` → `.env.local`. Лиды по умолчанию: **`POST /api/deals`** (тот же origin). Локально Vite проксирует на tipa; в проде нужен **nginx** (см. ниже). Опционально: **`VITE_LEAD_SUBMIT_URL`**, **`VITE_TIPA_FUNNEL_ID`**, **`VITE_TIPA_SOURCE_ID`** (UUID из tipa).
 - `npm run dev`
 
 ## Сборка
@@ -15,7 +15,7 @@
 
 В прод-сборке страницы подгружаются **lazy** (`React.lazy`); лендинги модулей (`/modules/:id`) грузят отдельными чанками; в `vite.config.ts` вынесены **react** / **react-router** / **react-helmet-async**, **framer-motion**, **lucide-react`.
 
-Переводы: один язык (RU) — **`locales/ru.json`**.
+Переводы: английский разбит на **`locales/en/*.json`** (несколько чанков, параллельная загрузка через **`locales/loadEnglish.ts`**); **`locales/ru.json`** и **`locales/uz.json`** — отдельные чанки при выборе языка. Фоновый **prefetch** возможных локалей по **`navigator.language`** / `navigator.languages` — в **`hooks/useLocaleChunkPrefetch.ts`** (гео/IP не используем: язык интерфейса по-прежнему из `localStorage`).
 
 Скрипт **`scripts/split-en-json.mjs`** — пересборка `en/*.json` из монолитного `en.json`, если когда-то понадобится снова собрать файл из одного источника.
 
@@ -33,13 +33,13 @@
 
 ## Тесты E2E
 
-`npm run test:e2e` — Playwright (Chromium), поднимает `npm run dev` на порту 3000. Сценарии: формы лида, смена **`<title>`** `/` ↔ `/login`. UI-режим: `npm run test:e2e:ui`.
+`npm run test:e2e` — Playwright (Chromium), поднимает `npm run dev` на порту 3000. Сценарии: формы лида, смена **`<title>`** `/` ↔ `/login`, переключение языков **RU → UZ → EN → RU** (`header-lang-trigger`). UI-режим: `npm run test:e2e:ui`.
 
 Первый запуск: `npx playwright install chromium`.
 
 ## SEO (SPA)
 
-`<title>`, `meta description`, canonical, **og:image** (`{VITE_SITE_ORIGIN}/og-image.jpg`) и Twitter Card задаются в **`components/SeoHead.tsx`** через **react-helmet-async**; текст по маршруту собирает **`config/resolvePageSeo.ts`** (переводы `seo.*` + заголовки страниц). Канонический URL: **`VITE_SITE_ORIGIN`** (по умолчанию `https://uchetgram.ru`).
+`<title>`, `meta description`, canonical, **og:image** (`{VITE_SITE_ORIGIN}/og-image.jpg`) и Twitter Card задаются в **`components/SeoHead.tsx`** через **react-helmet-async**; текст по маршруту собирает **`config/resolvePageSeo.ts`** (переводы `seo.*` + заголовки страниц). Канонический URL: **`VITE_SITE_ORIGIN`** (по умолчанию `https://taska.uz`) или `https://taska.uz` из `resolvePageSeo.ts`.
 
 Статический `index.html` остаётся стартовым для краулеров без JS; после гидрации мета обновляется под роут и язык.
 
@@ -84,7 +84,6 @@ location /api/deals {
 
 `services/api.ts` → **`submitLead`**:
 
-1. **`POST /api/deals`** на **том же origin**, nginx проксирует на **`https://tipa.uchetgram.ru/api/deals`**. Тело JSON (camelCase): `title`, `contactName`, `phone` / `contactPhone` (номер с сайта, иначе в CRM пусто в поле контакта), `notes`, `source` (`uchetgram.ru`), `stage` (`new`); опционально `funnelId` и `sourceId` (**`VITE_TIPA_FUNNEL_ID`** / **`VITE_TIPA_SOURCE_ID`** в `.env` при сборке — UUID из админки tipa, иначе выпадающие «Воронка» и «Источник» остаются пустыми). UTM в **`notes`**. **`Content-Type: application/json`**. **Без Authorization.**
-2. Параллельно — **Telegram**, если заданы `VITE_TELEGRAM_BOT_TOKEN` и `VITE_TELEGRAM_CHAT_ID`.
+**`POST /api/deals`** на **том же origin**, nginx проксирует на **`https://tipa.uchetgram.ru/api/deals`**. Тело JSON (camelCase): `title`, `contactName`, `phone` / `contactPhone` (номер с сайта, иначе в CRM пусто в поле контакта), `notes`, `source` (`uchetgram.ru`), `stage` (`new`); опционально `funnelId` и `sourceId` (**`VITE_TIPA_FUNNEL_ID`** / **`VITE_TIPA_SOURCE_ID`** в `.env` при сборке — UUID из админки tipa, иначе выпадающие «Воронка» и «Источник» остаются пустыми). UTM в **`notes`**. **`Content-Type: application/json`**. **Без Authorization.** Успех формы — только ответ CRM **2xx**.
 
 Прямой запрос из браузера на `tipa.uchetgram.ru` без прокси не проходит из‑за **CORS**; альтернатива — настроить `Access-Control-Allow-Origin` на стороне tipa (менее удобно, чем прокси на nginx).
