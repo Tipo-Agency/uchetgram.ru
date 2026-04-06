@@ -1,0 +1,23 @@
+# https://uchetgram.ru — uchetgram CRM / ERP
+# Статика из /public попадает в корень сайта при деплое (Vite).
+
+User-agent: *
+Allow: /
+
+# Служебные и нецелевые для поиска
+Disallow: /login
+Disallow: /404
+Disallow: /admin
+Disallow: /private
+
+# Яндекс: канонический хост без протокола
+User-agent: Yandex
+Allow: /
+Disallow: /login
+Disallow: /404
+Disallow: /admin
+Disallow: /private
+
+Host: uchetgram.ru
+
+Sitemap: https://uchetgram.ru/sitemap.xml
