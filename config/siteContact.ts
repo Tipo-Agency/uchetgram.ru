@@ -1,11 +1,11 @@
 /**
- * Публичные контакты uchetgram — одна точка правки для UI.
- * Поля schema.org (index.html) при смене телефона / мессенджера обновите вручную.
+ * Публичные контакты — одна точка правки для UI.
+ * JSON-LD в index.html держите в синке при смене ссылок.
  */
 export const SITE_CONTACT = {
-  telegramUrl: 'https://t.me/asdonskikh',
+  /** Мессенджер MAX */
+  maxUrl: 'https://max.ru/u/f9LHodD0cOIQMl3yvyWDJKtcvyC-rJzc_DC2XwwTomfnJvUDxYW3TVDy1jE',
+  instagramUrl: 'https://www.instagram.com/uchetgram/',
   /** Основной e-mail для заявок и футера */
   email: 'donskikhas@gmail.com',
-  phoneE164: '+998888000549',
-  phoneDisplay: '+998 88 800 05 49',
 } as const;

@@ -16,7 +16,7 @@ test.describe('Contact modal', () => {
     await expect(page.getByTestId('contact-modal-form')).toBeVisible({ timeout: 10_000 });
 
     await page.getByTestId('contact-modal-form').locator('input[type="text"]').fill('E2E Modal');
-    await page.getByTestId('contact-modal-form').locator('input[type="tel"]').fill('90 123 45 67');
+    await page.getByTestId('contact-modal-form').locator('input[type="tel"]').fill('900 123 45 67');
 
     await page.getByTestId('contact-modal-form').locator('button[type="submit"]').click();
 

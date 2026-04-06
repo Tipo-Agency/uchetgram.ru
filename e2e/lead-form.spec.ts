@@ -14,7 +14,7 @@ test.describe('Contact form (#contact)', () => {
     await page.locator('#contact').scrollIntoViewIfNeeded();
 
     await page.getByTestId('contact-inline-form').locator('input[type="text"]').fill('E2E Playwright');
-    await page.getByTestId('contact-inline-form').locator('input[type="tel"]').fill('90 123 45 67');
+    await page.getByTestId('contact-inline-form').locator('input[type="tel"]').fill('900 123 45 67');
 
     await page.getByTestId('contact-inline-form').locator('button[type="submit"]').click();
 

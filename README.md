@@ -78,7 +78,7 @@ location /api/deals {
 
 ## Контакты и SEO
 
-Публичные телефон / email / Telegram: **`config/siteContact.ts`**. Поля `telephone` и `sameAs` в JSON-LD в `index.html` держите в синке с этим файлом.
+Публичные email / MAX / Instagram: **`config/siteContact.ts`**. Поля `contactPoint`, `sameAs` и адрес в JSON-LD в `index.html` держите в синке с этим файлом.
 
 ## Заявки (лиды)
 

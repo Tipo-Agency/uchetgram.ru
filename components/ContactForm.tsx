@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from './Button';
 import { motion } from 'framer-motion';
-import { Send, CheckCircle, Smartphone, Clock, LayoutDashboard, Phone, XCircle } from 'lucide-react';
+import { Send, CheckCircle, Smartphone, Clock, LayoutDashboard, XCircle } from 'lucide-react';
 import { submitLead } from '../services/api';
-import { formatUzPhoneLocal, toFullUzPhone } from '../services/phone';
+import { formatRuPhoneLocal, toFullRuPhone } from '../services/phone';
 import { useLanguage } from '../contexts/LanguageContext';
 import { SITE_CONTACT } from '../config/siteContact';
 
@@ -18,7 +18,7 @@ export const ContactForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    const fullPhone = toFullUzPhone(contact);
+    const fullPhone = toFullRuPhone(contact);
     const result = await submitLead({
       name,
       contact: fullPhone,
@@ -159,16 +159,19 @@ export const ContactForm: React.FC = () => {
                   />
                 </div>
                 <div className="flex rounded-xl border border-slate-200/90 overflow-hidden bg-slate-50/90 focus-within:ring-2 focus-within:ring-brand/25 focus-within:border-brand/40 focus-within:bg-white transition-all">
-                  <span className="flex items-center px-4 bg-slate-100/90 text-slate-600 border-r border-slate-200/90 text-base font-semibold tabular-nums">+998</span>
+                  <span className="flex items-center px-4 bg-slate-100/90 text-slate-600 border-r border-slate-200/90 text-base font-semibold tabular-nums shrink-0">
+                    +7
+                  </span>
                   <input
                     required
                     value={contact}
-                    onChange={(e) => setContact(formatUzPhoneLocal(e.target.value))}
+                    onChange={(e) => setContact(formatRuPhoneLocal(e.target.value))}
                     type="tel"
                     inputMode="numeric"
-                    maxLength={12}
+                    autoComplete="tel-national"
+                    maxLength={14}
                     className="flex-1 bg-transparent px-5 py-4 text-ink placeholder:text-slate-400 outline-none min-w-0"
-                    placeholder="90 123 45 67"
+                    placeholder={t('contact.phonePlaceholder')}
                   />
                 </div>
 
@@ -176,24 +179,15 @@ export const ContactForm: React.FC = () => {
                   {isLoading ? t('contact.sending') : t('contact.submit')}
                 </Button>
 
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <a
-                    href={SITE_CONTACT.telegramUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl border border-slate-200/90 bg-white hover:border-brand/35 hover:bg-brand/[0.04] transition-colors text-ink font-semibold text-sm"
-                  >
-                    <Send size={18} className="text-brand" />
-                    {t('contact.writeTg')}
-                  </a>
-                  <a
-                    href={`tel:${SITE_CONTACT.phoneE164.replace(/\s/g, '')}`}
-                    className="flex-1 flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl border border-slate-200/90 bg-white hover:border-brand/35 hover:bg-brand/[0.04] transition-colors text-ink font-semibold text-sm"
-                  >
-                    <Phone size={18} className="text-brand" />
-                    {t('contact.call')}
-                  </a>
-                </div>
+                <a
+                  href={SITE_CONTACT.maxUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex w-full items-center justify-center gap-2 py-3.5 px-4 rounded-xl border border-slate-200/90 bg-white hover:border-brand/35 hover:bg-brand/[0.04] transition-colors text-ink font-semibold text-sm"
+                >
+                  <Send size={18} className="text-brand" />
+                  {t('contact.writeTg')}
+                </a>
 
                 <p className="text-[11px] text-slate-500 text-center leading-relaxed">{t('contact.privacy')}</p>
               </form>

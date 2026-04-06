@@ -104,7 +104,7 @@ export const TelegramSection: React.FC<TelegramSectionProps> = ({ onOpenModal })
                       </div>
                       <div className="flex justify-between gap-2">
                         <span className="text-gray-500 shrink-0">{t('telegram.phone')}</span>
-                        <span className="text-sky-400">+998 88 800 05 49</span>
+                        <span className="text-sky-400">+7 900 123 45 67</span>
                       </div>
                     </div>
                     <div className="mt-4 grid grid-cols-2 gap-2">

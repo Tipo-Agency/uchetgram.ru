@@ -1,40 +1,41 @@
-/** Форматирует ввод в полный номер +998 90 123 45 67 */
-export const formatUzPhone = (value: string): string => {
-  const digits = value.replace(/\D/g, '');
-  let local = digits.startsWith('998') ? digits.slice(3) : digits;
-  local = local.slice(0, 9);
-  const part1 = local.slice(0, 2);
-  const part2 = local.slice(2, 5);
-  const part3 = local.slice(5, 7);
-  const part4 = local.slice(7, 9);
-  let formatted = '+998';
-  if (part1) formatted += ` ${part1}`;
-  if (part2) formatted += ` ${part2}`;
-  if (part3) formatted += ` ${part3}`;
-  if (part4) formatted += ` ${part4}`;
-  return formatted;
-};
+function digitsOnly(value: string): string {
+  return value.replace(/\D/g, '');
+}
 
-/** Форматирует только локальную часть (90 123 45 67) для отображения в поле с префиксом +998 */
-export const formatUzPhoneLocal = (value: string): string => {
-  const digits = value.replace(/\D/g, '');
-  let local = digits.startsWith('998') ? digits.slice(3) : digits;
-  local = local.slice(0, 9);
-  const part1 = local.slice(0, 2);
-  const part2 = local.slice(2, 5);
-  const part3 = local.slice(5, 7);
-  const part4 = local.slice(7, 9);
-  if (!part1) return '';
-  let formatted = part1;
-  if (part2) formatted += ` ${part2}`;
-  if (part3) formatted += ` ${part3}`;
-  if (part4) formatted += ` ${part4}`;
-  return formatted;
-};
+/**
+ * 10 цифр после +7: ввод «900 123 45 67» (поддержка вставки с +7 / 8).
+ */
+export function formatRuPhoneLocal(value: string): string {
+  let d = digitsOnly(value);
+  if (d.startsWith('8') && d.length > 1) {
+    d = '7' + d.slice(1);
+  }
+  if (d.startsWith('7')) {
+    d = d.slice(1);
+  }
+  d = d.slice(0, 10);
+  const p1 = d.slice(0, 3);
+  const p2 = d.slice(3, 6);
+  const p3 = d.slice(6, 8);
+  const p4 = d.slice(8, 10);
+  let out = '';
+  if (p1) out = p1;
+  if (p2) out += ` ${p2}`;
+  if (p3) out += ` ${p3}`;
+  if (p4) out += ` ${p4}`;
+  return out.trim();
+}
 
-export const toFullUzPhone = (local: string): string => {
-  const digits = local.replace(/\D/g, '');
-  if (!digits) return '';
-  return formatUzPhone('998' + digits);
-};
-
+/** Полный номер E.164 для отправки в CRM, например +79001234567 */
+export function toFullRuPhone(localFormatted: string): string {
+  let d = digitsOnly(localFormatted);
+  if (d.startsWith('8') && d.length > 1) {
+    d = '7' + d.slice(1);
+  }
+  if (d.length === 11 && d.startsWith('7')) {
+    d = d.slice(1);
+  }
+  d = d.slice(0, 10);
+  if (!d) return '';
+  return `+7${d}`;
+}

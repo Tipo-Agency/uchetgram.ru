@@ -22,14 +22,14 @@ export const Footer: React.FC = () => {
             <p className="text-ink-muted text-sm leading-relaxed mb-6 max-w-xs">{t('footer.tagline')}</p>
             <div className="flex gap-4">
               <a
-                href={SITE_CONTACT.telegramUrl}
-                aria-label="Telegram"
+                href={SITE_CONTACT.maxUrl}
+                aria-label="MAX"
                 className="w-10 h-10 rounded-full bg-canvas-elevated border border-slate-200/90 flex items-center justify-center text-ink-muted hover:bg-brand hover:text-white hover:border-brand transition-all duration-200 shadow-soft"
               >
                 <Send size={18} />
               </a>
               <a
-                href="https://www.instagram.com/uchetgram.ru/"
+                href={SITE_CONTACT.instagramUrl}
                 aria-label="Instagram"
                 className="w-10 h-10 rounded-full bg-canvas-elevated border border-slate-200/90 flex items-center justify-center text-ink-muted hover:bg-brand hover:text-white hover:border-brand transition-all duration-200 shadow-soft"
               >
@@ -110,12 +110,7 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="text-ink font-semibold mb-5 tracking-tight">{t('footer.contacts')}</h4>
             <ul className="space-y-3 text-sm text-ink-muted">
-              <li>Tashkent, Uzbekistan</li>
-              <li>
-                <a href={`tel:${SITE_CONTACT.phoneE164.replace(/\s/g, '')}`} className="hover:text-brand transition-colors duration-200 font-medium text-ink">
-                  {SITE_CONTACT.phoneDisplay}
-                </a>
-              </li>
+              <li>{t('footer.contactLocation')}</li>
               <li>
                 <a href={`mailto:${SITE_CONTACT.email}`} className="hover:text-brand transition-colors duration-200">
                   {SITE_CONTACT.email}

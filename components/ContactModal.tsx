@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { X, Send, CheckCircle, Phone, XCircle } from 'lucide-react';
+import { X, Send, CheckCircle, XCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from './Button';
 import { submitLead } from '../services/api';
-import { formatUzPhoneLocal, toFullUzPhone } from '../services/phone';
+import { formatRuPhoneLocal, toFullRuPhone } from '../services/phone';
 import { useLanguage } from '../contexts/LanguageContext';
 import { SITE_CONTACT } from '../config/siteContact';
 
@@ -23,7 +23,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    const fullPhone = toFullUzPhone(contact);
+    const fullPhone = toFullRuPhone(contact);
     const result = await submitLead({
       name,
       contact: fullPhone,
@@ -112,15 +112,18 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-brand/20 focus:border-brand/50 outline-none transition-all"
                     />
                     <div className="flex rounded-xl border border-gray-200 overflow-hidden bg-gray-50 focus-within:ring-2 focus-within:ring-brand/20 focus-within:border-brand/50 focus-within:bg-white">
-                      <span className="flex items-center px-4 bg-gray-100 text-gray-600 border-r border-gray-200 text-sm font-medium">+998</span>
+                      <span className="flex items-center px-4 bg-gray-100 text-gray-600 border-r border-gray-200 text-sm font-medium shrink-0">
+                        +7
+                      </span>
                       <input 
                         required
                         value={contact}
-                        onChange={(e) => setContact(formatUzPhoneLocal(e.target.value))}
+                        onChange={(e) => setContact(formatRuPhoneLocal(e.target.value))}
                         type="tel" 
                         inputMode="numeric"
-                        maxLength={12}
-                        placeholder="90 123 45 67"
+                        autoComplete="tel-national"
+                        maxLength={14}
+                        placeholder={t('contact.phonePlaceholder')}
                         className="flex-1 bg-transparent px-4 py-3 text-gray-900 placeholder-gray-400 outline-none min-w-0"
                       />
                     </div>
@@ -134,16 +137,15 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                       {isLoading ? t('modal.sending') : t('modal.submit')}
                     </Button>
 
-                    <div className="flex gap-2">
-                      <a href={SITE_CONTACT.telegramUrl} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-gray-200 hover:border-brand/50 hover:bg-brand/5 transition-colors text-gray-700 font-medium text-sm">
-                        <Send size={16} className="text-brand" />
-                        {t('contact.writeTg')}
-                      </a>
-                      <a href={`tel:${SITE_CONTACT.phoneE164.replace(/\s/g, '')}`} className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-gray-200 hover:border-brand/50 hover:bg-brand/5 transition-colors text-gray-700 font-medium text-sm">
-                        <Phone size={16} className="text-brand" />
-                        {t('contact.call')}
-                      </a>
-                    </div>
+                    <a
+                      href={SITE_CONTACT.maxUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex w-full items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-gray-200 hover:border-brand/50 hover:bg-brand/5 transition-colors text-gray-700 font-medium text-sm"
+                    >
+                      <Send size={16} className="text-brand" />
+                      {t('contact.writeTg')}
+                    </a>
                     
                     <p className="text-[10px] text-gray-400 text-center">
                       {t('modal.privacy')}
