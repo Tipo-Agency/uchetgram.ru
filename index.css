@@ -62,3 +62,22 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+.tipa-credit {
+  width: fit-content;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: color 150ms, opacity 150ms;
+}
+.tipa-credit img { width: 64px; height: 42px; display: block; object-fit: contain; }
+.tipa-credit:hover { color: #12162b; }
+.tipa-credit:active { opacity: 0.7; }
+.tipa-credit:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .tipa-credit { transition: none; } }

@@ -120,7 +120,7 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="border-t border-slate-200/70 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="border-t border-slate-200/70 pt-8 flex flex-col md:flex-row flex-wrap items-center justify-between gap-4">
           <p className="text-ink-muted/80 text-xs">
             © {new Date().getFullYear()} uchetgram.ru. {t('footer.copyright')}
           </p>
@@ -135,6 +135,10 @@ export const Footer: React.FC = () => {
               {t('footer.cookies')}
             </Link>
           </div>
+          <a className="tipa-credit" href="https://tipa.uz/ru" target="_blank" rel="nofollow noopener noreferrer">
+            <span>Сделано</span>
+            <img src="/media/tipa-agency-animated.svg" alt="TIPA" width="64" height="42" />
+          </a>
         </div>
       </div>
     </footer>
